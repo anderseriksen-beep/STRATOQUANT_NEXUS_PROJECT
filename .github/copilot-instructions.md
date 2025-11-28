@@ -1,25 +1,38 @@
-This repository is **StratoQuant**, a modular intraday crypto trading engine.
+---
+# apply to all files in the repo
+applyTo: "**"
+---
 
-When suggesting code, explanations, or refactors, assume:
+This repository is **StratoQuant**, a modular intraday crypto trading engine
+for crypto perpetual futures.
 
-- We trade crypto perpetual futures intraday (e.g. BTCUSDT, ETHUSDT).
-- Robust risk management and realistic execution are more important than
-  maximizing leverage or raw PnL.
-- Core Python code lives primarily under `core/` and is organised by layers:
-  data feed, signal fusion, risk, execution, and API.
-- Tests live under `tests/` and should be kept in sync with core logic.
-- TradingView strategies and indicators are written in **Pine Script v6**.
+When generating or reviewing code for this repo:
 
-Guidelines for suggestions:
+- Assume the main code lives under `core/`, with layers for:
+  - L0 data feed
+  - L3 signal fusion
+  - L4 risk manager
+  - L5 execution bridge
+- Always keep risk management and realistic execution higher priority than PnL.
 
-- Prefer clean, modular Python with clear separation of concerns.
-- For Pine v6, always separate:
-  - Inputs and configuration.
-  - Signal logic.
-  - Risk management (SL/TP, sizing, filters).
-- Highlight important risk or execution implications when changing strategy
-  logic or order handling.
-- Avoid strategies that rely on martingale, unlimited averaging down, or
-  unrealistic zero-slippage assumptions.
-- Never suggest committing secrets (API keys, credentials) to the repository;
-  refer to `.env.local` and environment variables instead.
+Domain knowledge:
+
+- Before making design decisions about trading, risk, or microstructure,
+  consult: `docs/stratoquant-domain-knowledge.md`.
+
+Build & test:
+
+- To install dependencies, run:
+
+  `pip install -r requirements.txt -r requirements-dev.txt`
+
+- To run tests and checks, run:
+
+  `make test` (or `pytest`)
+  `pre-commit run --all-files`
+
+General rules:
+
+- Never store secrets (API keys, credentials) in the repo. Use `.env.local`.
+- Avoid martingale / averaging-down strategies and unrealistic zero-slippage assumptions.
+- Prefer small, well-focused modules and clear tests in `tests/`.
