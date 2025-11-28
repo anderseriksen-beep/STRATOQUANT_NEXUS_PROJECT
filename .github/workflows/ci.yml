@@ -1,0 +1,21 @@
+name: CI
+on:
+  pull_request:
+    branches: [ main ]
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with: python-version: '3.11'
+      - name: Install
+        run: pip install -r requirements.txt
+      - name: Lint
+        run: |
+          pip install black flake8
+          black --check .
+          flake8 .
+      - name: Test
+        run: pytest -q --maxfail=1
