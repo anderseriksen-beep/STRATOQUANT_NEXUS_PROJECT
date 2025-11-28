@@ -88,3 +88,4 @@ StratoQuant is a modular, intraday crypto trading engine for perpetual futures
 - Capital preservation first, edge second, optimization last.
 - Prefer few robust strategies over many fragile ones.
 - Make all assumptions about liquidity, fills, and latency explicit in code and docs.
+tions about liquidity, fills, and latency explicit in code and docs.
