@@ -1,0 +1,10 @@
+//@version=5
+indicator("SQ L99 Microstructure Guard (stub)")
+
+// demo signals (replace by your logic)
+longCondition = ta.crossover(ta.sma(close, 9), ta.sma(close, 21))
+shortCondition = ta.crossunder(ta.sma(close, 9), ta.sma(close, 21))
+
+// alert payloads (JSON). Use TradingView Alert webhook URL pointing to your server
+alertcondition(longCondition, title="SQ LONG", message='{"signal":"LONG","symbol":"{{ticker}}","time":"{{time}}"}')
+alertcondition(shortCondition, title="SQ SHORT", message='{"signal":"SHORT","symbol":"{{ticker}}","time":"{{time}}"}')
