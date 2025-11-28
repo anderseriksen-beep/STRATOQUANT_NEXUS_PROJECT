@@ -1,10 +1,38 @@
 //@version=5
 indicator("SQ L99 Microstructure Guard (stub)")
 
-// demo signals (replace by your logic)
-longCondition = ta.crossover(ta.sma(close, 9), ta.sma(close, 21))
-shortCondition = ta.crossunder(ta.sma(close, 9), ta.sma(close, 21))
+// =========================
+// (1) Inputs and parameters
+// =========================
+// Signal parameters
+fastLength = input.int(9, title="Fast SMA Length")
+slowLength = input.int(21, title="Slow SMA Length")
+
+// Risk management parameters (placeholders)
+stopLossPerc = input.float(1.0, title="Stop Loss (%)", minval=0.1, step=0.1)
+takeProfitPerc = input.float(2.0, title="Take Profit (%)", minval=0.1, step=0.1)
+positionSizePerc = input.float(10.0, title="Position Size (% of equity)", minval=0.1, step=0.1)
+
+// =========================
+// (2) Signal logic
+// =========================
+fastSMA = ta.sma(close, fastLength)
+slowSMA = ta.sma(close, slowLength)
+longCondition = ta.crossover(fastSMA, slowSMA)
+shortCondition = ta.crossunder(fastSMA, slowSMA)
+
+// =========================
+// (3) Risk block (SL/TP, position sizing, filters)
+// =========================
+// Explicit stop-loss and take-profit logic (placeholder, for alert-only stub)
+// In a strategy, use strategy.exit for SL/TP. Here, we just show the logic.
+entryPrice = close
+stopLossPrice = entryPrice * (1 - stopLossPerc / 100)
+takeProfitPrice = entryPrice * (1 + takeProfitPerc / 100)
+
+// NOTE: Martingale/averaging down is strictly prohibited per domain knowledge.
+// Position sizing is fixed as per input; no pyramiding or averaging down.
 
 // alert payloads (JSON). Use TradingView Alert webhook URL pointing to your server
-alertcondition(longCondition, title="SQ LONG", message='{"signal":"LONG","symbol":"{{ticker}}","time":"{{time}}"}')
-alertcondition(shortCondition, title="SQ SHORT", message='{"signal":"SHORT","symbol":"{{ticker}}","time":"{{time}}"}')
+alertcondition(longCondition, title="SQ LONG", message='{"signal":"LONG","symbol":"{{ticker}}","time":"{{time}}","entryPrice":"{{close}}","stopLoss":"'+str.tostring(stopLossPrice)+'","takeProfit":"'+str.tostring(takeProfitPrice)+'"}')
+alertcondition(shortCondition, title="SQ SHORT", message='{"signal":"SHORT","symbol":"{{ticker}}","time":"{{time}}","entryPrice":"{{close}}","stopLoss":"'+str.tostring(stopLossPrice)+'","takeProfit":"'+str.tostring(takeProfitPrice)+'"}')
