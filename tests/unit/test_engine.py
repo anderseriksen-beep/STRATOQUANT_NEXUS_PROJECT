@@ -1,6 +1,5 @@
 """Unit tests for the trading engine."""
 
-
 import pytest
 
 from stratoquant_nexus import TradingEngine

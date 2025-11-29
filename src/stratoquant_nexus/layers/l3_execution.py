@@ -7,6 +7,7 @@ This layer handles:
 - Execution reporting
 """
 
+import time
 from datetime import UTC, datetime
 from decimal import Decimal
 from enum import Enum
@@ -207,8 +208,6 @@ class ExecutionLayer(BaseLayer):
         Returns:
             Execution report
         """
-        import time
-
         start_time = time.time()
 
         # Simulate slippage
