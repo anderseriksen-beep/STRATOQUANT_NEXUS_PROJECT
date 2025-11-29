@@ -70,5 +70,42 @@ This document details automated setup and execution of the StratoQuant Nexus eng
            run: pip install -r requirements.txt
          - name: Lint with flake8
            run: flake8 src/
+
+Using actions/setup-python ensures consistent behavior
+docs.github.com
+. You can expand this with job matrices for multiple Python versions if needed.
+
+    Domain "Wiring": Upon initialization, domain_apply.py should also register new domains into a central registry (e.g. update a master index or JSON). This ensures new modules are recognized by the orchestrator. Automate domain name validation and boilerplate code generation.
+
+    Monitoring Hooks: Include hooks or middleware to emit runtime metrics (e.g. processing time per layer, anomaly rates). These hooks can log to a monitoring system. Provide a config to enable Prometheus or custom logging of the system’s “Trust-Confidence-Noise” (TCN) score. Document how to run local dashboards.
+
+    Custom Actions: If there are custom processes (e.g. a code generator or Pine compiler), automate them with scripts and integrate them into the CI pipeline.
+
+Runtime Metrics & Monitoring
+
+Structure the engine so that each layer logs performance metrics. For example, include a metrics/ library to collect:
+
+    Execution time per layer
+
+    Data throughput (bars/second)
+
+    Accuracy/confidence scores
+    These can feed into Grafana or Prometheus. Provide default Grafana dashboards or Pine-rendered alerts to visualize health.
+    Configure automatic alerts (e.g. Slack or email) if metrics go out of bounds.
+    Set up periodic retraining jobs (cron or GitHub workflow) that trigger model updates when new data is available. Document how to run python retrain_models.py nightly or on data change.
+
+Local Development
+
+Use a Dockerfile for replicable environments: one container for Python engine, one for Pine (if local testing is needed). For CI, consider using Docker build/push on merge. Document how to run docker build -t stratonexus:latest . and docker-compose up for full-stack testing.
+
+Include instructions for developer tools:
+
+    Installing pre-commit hooks (e.g. pre-commit for code formatting).
+
+    How to run VSCode in “Dev Container” mode using .devcontainer/ config if desired.
+
+All scripts and workflows should be fully automated; manual steps must be limited to initial setup (installing Docker, etc.). Refer to [GitHub Actions docs]
+docs.github.com
+and Python packaging guides for best practices.
          - name: Run tests
            run: pytest
