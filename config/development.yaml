@@ -1,0 +1,17 @@
+# StratoQuant Nexus - Development Configuration
+
+app:
+  log_level: "DEBUG"
+  debug: true
+
+trading:
+  paper_trading: true
+  max_positions: 3
+
+webhook:
+  host: "127.0.0.1"
+  port: 8080
+
+layers:
+  execution:
+    simulate: true
