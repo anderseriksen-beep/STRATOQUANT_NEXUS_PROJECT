@@ -1,6 +1,35 @@
 # Minimal Flask webhook for TradingView alerts
-from flask import Flask, request, jsonify
 import logging
+
+# Try to import Flask; provide lightweight fallbacks when Flask is not
+# available (helps static analysis / editor environments).
+try:
+    from flask import Flask, request, jsonify  # type: ignore
+except Exception:
+    # Fallback stubs so this file can be linted/inspected without Flask
+    from typing import Any
+
+    class _FlaskStub:  # minimal callable stub for Flask()
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def route(self, *args, **kwargs):
+            def _decorator(f):
+                return f
+
+            return _decorator
+
+        def run(self, *args, **kwargs):
+            raise RuntimeError("Flask is not installed")
+
+    class _RequestStub:  # minimal request with json attribute
+        json = None
+
+    def jsonify(x: Any):
+        return x
+
+    Flask = _FlaskStub  # type: ignore
+    request = _RequestStub()  # type: ignore
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
