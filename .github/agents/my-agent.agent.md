@@ -1,22 +1,13 @@
 ---
-# Fill in the fields below to create a basic custom agent for your repository.
-# The Copilot CLI can be used for local testing: https://gh.io/customagents/cli
-# To make this agent available, merge this file into the default repository branch.
-# For format details, see: https://gh.io/customagents/config
-
-name:
-description:
----
-
-# My Agent
-
----
 name: StratoQuant
 description: >
   Custom Copilot coding agent for the StratoQuant intraday crypto
-  trading engine. Knows about L0-L5 layers, risk, and execution.
+  trading engine. Knows about L0–L5 layers, risk, and execution.
 target: github-copilot
-tools: [edit, search, shell]
+tools:
+  - edit
+  - search
+  - shell
 ---
 
 # StratoQuant Coding Agent
@@ -51,7 +42,7 @@ When assigned a task in this repo:
 4. **Test**
    - After implementing changes, run:
      - `pip install -r requirements.txt -r requirements-dev.txt` (if needed)
-     - `make test`  (or `pytest`)
+     - `make test` (or `pytest`)
      - `pre-commit run --all-files`
 
 5. **Prepare the PR**
