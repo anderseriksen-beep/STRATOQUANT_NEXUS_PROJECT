@@ -1,0 +1,7 @@
+# .sq/agent_config.yaml
+default_brain_model: "gpt-5.1-thinking"
+use_cases:
+  - architecture
+  - domain_design
+  - risk_engine_design
+  - wiring_master_edits

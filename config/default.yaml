@@ -1,0 +1,54 @@
+# StratoQuant Nexus Default Configuration
+
+app:
+  name: "StratoQuant Nexus"
+  log_level: "INFO"
+  debug: false
+
+trading:
+  paper_trading: true
+  default_exchange: "binance"
+  max_positions: 10
+  symbols:
+    - "BTC/USD"
+    - "ETH/USD"
+  timeframes:
+    - "1h"
+    - "4h"
+    - "1d"
+
+risk:
+  level: "moderate"
+  max_position_size_pct: 0.10
+  max_portfolio_exposure_pct: 0.50
+  default_stop_loss_pct: 0.02
+  default_take_profit_pct: 0.04
+  min_risk_reward_ratio: 1.5
+
+execution:
+  default_order_type: "market"
+  slippage_tolerance_pct: 0.001
+  fee_rate: 0.001
+  retry_attempts: 3
+  retry_delay_seconds: 1
+
+webhook:
+  enabled: true
+  host: "0.0.0.0"
+  port: 8080
+  path: "/webhook"
+
+layers:
+  data:
+    enabled: true
+    max_candles_per_symbol: 1000
+  signal:
+    enabled: true
+    rsi_period: 14
+    rsi_overbought: 70
+    rsi_oversold: 30
+  risk:
+    enabled: true
+  execution:
+    enabled: true
+    simulate: true

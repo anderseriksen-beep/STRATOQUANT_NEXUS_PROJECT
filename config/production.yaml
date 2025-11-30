@@ -1,0 +1,22 @@
+# StratoQuant Nexus - Production Configuration
+
+app:
+  log_level: "INFO"
+  debug: false
+
+trading:
+  paper_trading: false
+  max_positions: 10
+
+risk:
+  level: "moderate"
+  max_position_size_pct: 0.05
+  max_portfolio_exposure_pct: 0.30
+
+webhook:
+  host: "0.0.0.0"
+  port: 8080
+
+layers:
+  execution:
+    simulate: false
