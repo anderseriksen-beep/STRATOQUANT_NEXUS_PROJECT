@@ -30,4 +30,3 @@ jobs:
         run: |
           pip install pytest
           pytest || echo "No tests found or tests skipped"
-        continue-on-error: true
