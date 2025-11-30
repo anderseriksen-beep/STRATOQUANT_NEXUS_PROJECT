@@ -11,6 +11,10 @@ permissions:
   contents: read
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -77,14 +81,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -e ".[dev]"
-
-      - name: Run mypy
-        run: mypy src/stratoquant_nexus --ignore-missing-imports
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -94,11 +90,9 @@ jobs:
           pip install flake8
           # stop the build if there are Python syntax errors or undefined names
           flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          # exit-zero treats all errors as warnings
-          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-        continue-on-error: true
+          # fail the build if complexity or line length violations are found
+          flake8 . --count --max-complexity=10 --max-line-length=127 --statistics
       - name: Run tests
         run: |
           pip install pytest
-          pytest || echo "No tests found or tests skipped"
-        continue-on-error: true
+          pytest
