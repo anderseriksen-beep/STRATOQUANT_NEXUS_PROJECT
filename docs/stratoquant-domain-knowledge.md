@@ -1,91 +1,63 @@
 # StratoQuant Domain Knowledge
 
-StratoQuant is a modular, intraday crypto trading engine for perpetual futures
-(e.g. BTCUSDT, ETHUSDT) on centralized exchanges.
+StratoQuant is an intraday crypto trading system focused on perpetual futures (e.g. BTCUSDT) on centralized exchanges.
 
-## Markets and Timeframes
+## Markets and Instruments
 
-- Instruments: crypto perpetual futures (USDT-margined).
-- Main timeframes: 1s, 1m, 3m, 5m, 15m, 1h.
-- We care about:
-  - Exchange fees, funding, tick size, min order size.
-  - Latency and realistic fill assumptions (no magic zero-slippage fills).
+- Trade universe: crypto perpetual futures (BTCUSDT, ETHUSDT, etc.).
+- Typical timeframes: 1s, 1m, 3m, 5m, 15m, 1h.
+- Exchange microstructure matters: fees, funding, tick size, min size.
 
-## Regimes and Volatility
+## Regime and Volatility
 
-- The system classifies regimes, e.g.:
-  - Calm / range-bound.
-  - Trending (up / down).
-  - Volatile / chaotic.
+- We classify market regimes (e.g. calm, trending, volatile, chaotic).
 - Regime is used to:
   - Adjust position sizing.
   - Enable/disable certain strategies.
-  - Tighten or loosen risk parameters (stops, daily loss caps).
+  - Tighten or loosen risk limits.
 
 ## Microstructure and Order Book
 
-- Important concepts:
-  - Best bid/ask, spread, depth, order book imbalance.
-  - Liquidity voids / air pockets.
-  - Sweep activity and spoofing / fake liquidity.
+- We care about:
+  - Spread, depth, queue position, order book imbalance.
+  - Liquidity voids / air pockets and spoofing behavior.
 - Execution rules:
   - Prefer limit / post-only where possible.
-  - Avoid trading into obvious illiquidity or during extreme sweeps.
-  - Always assume non-zero slippage and partial fills.
+  - Avoid trading into obvious illiquidity or during aggressive sweeps.
+  - Respect latency and realistic fill assumptions.
 
 ## Trend / Kinematics
 
-- Multi-timeframe structure:
-  - Short-term (1m–5m) drives entries and trade management.
-  - Higher TF (15m–1h) defines bias and filters trades.
-- We avoid:
-  - Single-candle fake breakouts without follow-through.
-  - Overfitting to one timeframe or one set of parameters.
+- We use multi-timeframe context:
+  - Short-term (1m–5m) momentum for entries.
+  - Higher TF (15m–1h) to define bias and filter trades.
+- Trend confirmation is required to scale in; we avoid single-candle breakouts without follow-through.
 
 ## Risk Management
 
-- Hard limits:
+- Hard caps:
   - Max risk per trade.
-  - Max risk per day / session.
-  - Max concurrent exposure per instrument and overall.
-- Every strategy must:
-  - Use explicit stop-loss logic.
-  - Use position sizing tied to volatility and liquidity.
-  - Avoid martingale / uncontrolled averaging down.
-- Evaluation:
-  - Focus on risk-adjusted performance (drawdowns, volatility of equity),
-    not only absolute PnL.
+  - Max risk per day and per session.
+- Use stop-loss and position sizing based on volatility and liquidity.
+- No martingale, no uncontrolled averaging down.
+- Strategy performance is evaluated by risk-adjusted metrics, not raw PnL.
 
-## Architecture Overview
+## Architecture
 
-- Python backend:
-  - `core/` holds engine components:
-    - L0: data feed / ingestion.
-    - L3: signal fusion.
-    - L4: risk manager.
-    - L5: execution bridge.
-  - FastAPI app (`core/app.py`) for APIs / services.
-- Pine Script v6:
-  - Used for TradingView charting and prototyping.
-  - Strategies should be portable back to Python logic.
+- Python backend for:
+  - Data ingestion and feature building (L0–L20).
+  - Signal generation and strategy logic (L40–L60).
+  - Execution and brokerage integration (L80+).
+- Pine Script v6 for:
+  - Visualisation and prototyping on TradingView charts.
+  - Strategy prototypes that can be ported to Python.
 
 ## Coding Standards
 
 - Python:
-  - Clear modules with single responsibility (data, features, signals, risk,
-    execution).
+  - Clear module boundaries (data, models, strategies, execution, risk).
   - Type hints where practical.
-  - Tests under `tests/` for risk-critical and core logic.
-- Pine Script v6:
-  - Separate:
-    1. Inputs and parameters.
-    2. Signal logic.
-    3. Risk block (SL/TP, position sizing, filters).
-  - Expose major risk parameters as inputs for easy experimentation.
-
-## Design Principles
-
-- Capital preservation first, edge second, optimization last.
-- Prefer few robust strategies over many fragile ones.
-- Make all assumptions about liquidity, fills, and latency explicit in code and docs.
-tions about liquidity, fills, and latency explicit in code and docs.
+  - Tests for core logic and risk-critical components.
+- Pine v6:
+  - Separate input section, signal logic, and risk block.
+  - Expose key risk parameters (SL, TP, max size) as inputs.

@@ -1,14 +1,12 @@
 ---
-applyTo: "**"
-excludeAgent: "coding-agent"
+applyTo: "core/**"
 ---
 
-When performing a code review for this repository:
+When editing code in `core/`:
 
-- Focus on risk, correctness, and microstructure realism first,
-  style second.
-- If a change modifies execution or risk:
-  - Verify that unit tests for L4/L5 exist or suggest new ones.
-  - Check for realistic handling of failures (timeouts, rejects).
-- Prefer comments with small, concrete suggested changes the
-  developer can apply directly.
+- Preserve the L0/L3/L4/L5 separation.
+- Keep FastAPI (`core/app.py`) thin; push heavy logic into layer modules.
+- Before changing risk or execution logic, explicitly consider:
+  - position sizing
+  - slippage and partial fills
+  - failure modes (exchange errors, timeouts)
